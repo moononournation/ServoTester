@@ -16,27 +16,49 @@ Servo myServo;  // create a servo object
 void setup() {
   gfx->begin();
   gfx->fillScreen(BLACK);
-  gfx->setTextColor(WHITE, BLACK);
-  gfx->setTextSize(8);
+  gfx->setTextSize(2);
+  gfx->setCursor(0, 0);
+  gfx->setTextColor(WHITE, RED);
+  gfx->print("Servo ");
+  gfx->setTextColor(WHITE, GREEN);
+  gfx->print("Tester ");
+  gfx->setCursor(0, 24);
+  gfx->setTextColor(CYAN, BLACK);
+  gfx->println("Pulse\nWidth");
+  gfx->setCursor(0, 64);
+  gfx->setTextColor(BLUE, BLACK);
+  gfx->println("Angle");
 
   myServo.attach(5);
+  myEnc.write(DEFAULT_PULSE_WIDTH);
 }
 
 long oldPosition  = -999;
 
 void loop() {
   long newPosition = myEnc.read();
-  if (newPosition < 0) {
-    newPosition = 0;
-    myEnc.write(0);
+  if (newPosition < MIN_PULSE_WIDTH) {
+    newPosition = MIN_PULSE_WIDTH;
+    myEnc.write(MIN_PULSE_WIDTH);
   }
-  if (newPosition > 180) {
-    newPosition = 180;
-    myEnc.write(180);
+  if (newPosition > MAX_PULSE_WIDTH) {
+    newPosition = MAX_PULSE_WIDTH;
+    myEnc.write(MAX_PULSE_WIDTH);
   }
   if (newPosition != oldPosition) {
-    gfx->setCursor(0, 0);
+    gfx->setTextSize(4);
+    gfx->setTextColor(WHITE, BLACK);
+    gfx->setCursor(64, 24);
+    if (newPosition < 1000) {
+      gfx->print(" ");
+    }
     gfx->print(newPosition);
+
+    int angle = map(newPosition, MIN_PULSE_WIDTH, MAX_PULSE_WIDTH, 0, 180);
+    gfx->setTextSize(2);
+    gfx->setTextColor(WHITE, BLACK);
+    gfx->setCursor(64, 64);
+    gfx->print(angle);
     gfx->print("  ");
 
     // set the servo position
