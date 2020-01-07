@@ -1,3 +1,5 @@
+#define ENCODER_TO_PULSE_RATIO 10
+
 // display
 #include "SPI.h"
 #include "Arduino_HWSPI.h"
@@ -30,20 +32,20 @@ void setup() {
   gfx->println("Angle");
 
   myServo.attach(5);
-  myEnc.write(DEFAULT_PULSE_WIDTH);
+  myEnc.write(DEFAULT_PULSE_WIDTH / ENCODER_TO_PULSE_RATIO);
 }
 
 long oldPosition  = -999;
 
 void loop() {
-  long newPosition = myEnc.read();
+  long newPosition = myEnc.read() * ENCODER_TO_PULSE_RATIO;
   if (newPosition < MIN_PULSE_WIDTH) {
     newPosition = MIN_PULSE_WIDTH;
-    myEnc.write(MIN_PULSE_WIDTH);
+    myEnc.write(MIN_PULSE_WIDTH / ENCODER_TO_PULSE_RATIO);
   }
   if (newPosition > MAX_PULSE_WIDTH) {
     newPosition = MAX_PULSE_WIDTH;
-    myEnc.write(MAX_PULSE_WIDTH);
+    myEnc.write(MAX_PULSE_WIDTH / ENCODER_TO_PULSE_RATIO);
   }
   if (newPosition != oldPosition) {
     gfx->setTextSize(4);
