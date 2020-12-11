@@ -1,7 +1,7 @@
 #define ENCODER_TO_PULSE_RATIO 10
 
 // display
-#include "Arduino_GFX_Library.h"
+#include <Arduino_GFX_Library.h>
 Arduino_DataBus *bus = new Arduino_HWSPI(9 /* DC */, 8 /* CS */);
 Arduino_GFX *gfx = new Arduino_ST7735(bus, 10 /* RST */, 3 /* rotation */, true /* IPS */, 80 /* width */, 160 /* height */, 26 /* col offset 1 */, 1 /* row offset 1 */, 26 /* col offset 2 */, 1 /* row offset 2 */);
 
