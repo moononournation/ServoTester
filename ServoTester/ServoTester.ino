@@ -1,10 +1,7 @@
 #define ENCODER_TO_PULSE_RATIO 10
 
 // display
-#include "SPI.h"
-#include "Arduino_HWSPI.h"
-#include "Arduino_GFX.h"
-#include "Arduino_ST7735.h"
+#include "Arduino_GFX_Library.h"
 Arduino_DataBus *bus = new Arduino_HWSPI(9 /* DC */, 8 /* CS */);
 Arduino_GFX *gfx = new Arduino_ST7735(bus, 10 /* RST */, 3 /* rotation */, true /* IPS */, 80 /* width */, 160 /* height */, 26 /* col offset 1 */, 1 /* row offset 1 */, 26 /* col offset 2 */, 1 /* row offset 2 */);
 
@@ -39,9 +36,12 @@ long oldPosition  = -999;
 
 void loop() {
   long newPosition = myEnc.read() * ENCODER_TO_PULSE_RATIO;
-  if (newPosition < MIN_PULSE_WIDTH) {
-    newPosition = MIN_PULSE_WIDTH;
-    myEnc.write(MIN_PULSE_WIDTH / ENCODER_TO_PULSE_RATIO);
+  // if (newPosition < MIN_PULSE_WIDTH) {
+  //   newPosition = MIN_PULSE_WIDTH;
+  //   myEnc.write(MIN_PULSE_WIDTH / ENCODER_TO_PULSE_RATIO);
+  if (newPosition < 670) {
+    newPosition = 670;
+    myEnc.write(670 / ENCODER_TO_PULSE_RATIO);
   }
   if (newPosition > MAX_PULSE_WIDTH) {
     newPosition = MAX_PULSE_WIDTH;
